@@ -1,10 +1,10 @@
 class Dog < Formula
   desc "私人 dog 工具"
   homepage "https://github.com/griffinsin/homebrew-dog"
-  version "1.0.1"
+  version "1.0.2"
   license "MIT"
   
-  url "https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v1.0.0.tar.gz"
+  url "https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v1.0.2.tar.gz"
   sha256 "6bef968bc785a9398c78dcf61bdb0f588252113c017268adfafb450fd90a8edf"
   
   # 注意：sha256值需要在创建GitHub release后更新为实际值

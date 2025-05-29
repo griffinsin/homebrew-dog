@@ -80,9 +80,27 @@ SHA256=$(curl -Ls "$TARBALL_URL" | shasum -a 256 | cut -d ' ' -f 1)
 echo -e "${GREEN}SHA256: $SHA256${RESET}"
 
 # 然后更新Formula/dog.rb中的版本号、URL和SHA256
-sed -i '' "s/version \"[0-9]\+\.[0-9]\+\.[0-9]\+\"/version \"$NEW_VERSION\"/" Formula/dog.rb
-sed -i '' "s|url \"https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v[0-9]\+\.[0-9]\+\.[0-9]\+\.tar\.gz\"|url \"https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v$NEW_VERSION.tar.gz\"|" Formula/dog.rb
-sed -i '' "s/sha256 \"[a-f0-9]\{64\}\"/sha256 \"$SHA256\"/" Formula/dog.rb
+# 使用更精确的方式更新文件内容
+
+# 读取当前文件内容
+FORMULA_CONTENT=$(cat Formula/dog.rb)
+
+# 替换版本号
+FORMULA_CONTENT=$(echo "$FORMULA_CONTENT" | sed "s/version \"[0-9]\+\.[0-9]\+\.[0-9]\+\"/version \"$NEW_VERSION\"/")
+
+# 替换URL
+FORMULA_CONTENT=$(echo "$FORMULA_CONTENT" | sed "s|url \"https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v[0-9]\+\.[0-9]\+\.[0-9]\+\.tar\.gz\"|url \"https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v$NEW_VERSION.tar.gz\"|")
+
+# 替换SHA256
+FORMULA_CONTENT=$(echo "$FORMULA_CONTENT" | sed "s/sha256 \"[a-f0-9]\{64\}\"/sha256 \"$SHA256\"/")
+
+# 写回文件
+echo "$FORMULA_CONTENT" > Formula/dog.rb
+
+# 打印更新后的文件内容进行验证
+echo -e "${BLUE}更新后的Formula/dog.rb文件内容:${RESET}"
+grep -E 'version|url|sha256' Formula/dog.rb
+
 echo -e "${GREEN}已更新Formula/dog.rb中的版本号、URL和SHA256${RESET}"
 
 # 提交并推送更改
