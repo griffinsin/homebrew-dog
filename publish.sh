@@ -43,10 +43,10 @@ echo -e "${GREEN}新版本: ${NEW_VERSION}${RESET}"
 sed -i '' "s/VERSION=\"[0-9]\+\.[0-9]\+\.[0-9]\+\"/VERSION=\"$NEW_VERSION\"/" lib/globals.sh
 echo -e "${GREEN}已更新globals.sh中的版本号${RESET}"
 
-# 更新Formula/man.rb中的版本号和URL
-sed -i '' "s/version \"[0-9]\+\.[0-9]\+\.[0-9]\+\"/version \"$NEW_VERSION\"/" Formula/man.rb
-sed -i '' "s|url \"https://github.com/griffinsin/homebrew-man/archive/refs/tags/v[0-9]\+\.[0-9]\+\.[0-9]\+\.tar\.gz\"|url \"https://github.com/griffinsin/homebrew-man/archive/refs/tags/v$NEW_VERSION.tar.gz\"|" Formula/man.rb
-echo -e "${GREEN}已更新Formula/man.rb中的版本号和URL${RESET}"
+# 更新Formula/dog.rb中的版本号和URL
+sed -i '' "s/version \"[0-9]\+\.[0-9]\+\.[0-9]\+\"/version \"$NEW_VERSION\"/" Formula/dog.rb
+sed -i '' "s|url \"https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v[0-9]\+\.[0-9]\+\.[0-9]\+\.tar\.gz\"|url \"https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v$NEW_VERSION.tar.gz\"|" Formula/dog.rb
+echo -e "${GREEN}已更新Formula/dog.rb中的版本号和URL${RESET}"
 
 # 检查工作目录是否干净
 if [ -n "$(git status --porcelain)" ]; then
@@ -86,12 +86,12 @@ curl -L -o "$TARBALL_PATH" "$TARBALL_URL"
 SHA256=$(shasum -a 256 "$TARBALL_PATH" | cut -d ' ' -f 1)
 echo -e "${GREEN}SHA256: $SHA256${RESET}"
 
-# 更新Formula/man.rb中的SHA256
-sed -i '' "s/sha256 \"[a-f0-9]\{64\}\"/sha256 \"$SHA256\"/" Formula/man.rb
+# 更新Formula/dog.rb中的SHA256
+sed -i '' "s/sha256 \"[a-f0-9]\{64\}\"/sha256 \"$SHA256\"/" Formula/dog.rb
 echo -e "${GREEN}已更新SHA256${RESET}"
 
 # 提交并推送更改
-git add Formula/man.rb
+git add Formula/dog.rb
 git commit -m "更新版本 $NEW_VERSION 的SHA256"
 git push origin main
 echo -e "${GREEN}已提交并推送SHA256更新${RESET}"
