@@ -39,14 +39,9 @@ done
 
 echo -e "${GREEN}新版本: ${NEW_VERSION}${RESET}"
 
-# 更新globals.sh中的版本号
+# 首先更新globals.sh中的版本号
 sed -i '' "s/VERSION=\"[0-9]\+\.[0-9]\+\.[0-9]\+\"/VERSION=\"$NEW_VERSION\"/" lib/globals.sh
 echo -e "${GREEN}已更新globals.sh中的版本号${RESET}"
-
-# 更新Formula/dog.rb中的版本号和URL
-sed -i '' "s/version \"[0-9]\+\.[0-9]\+\.[0-9]\+\"/version \"$NEW_VERSION\"/" Formula/dog.rb
-sed -i '' "s|url \"https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v[0-9]\+\.[0-9]\+\.[0-9]\+\.tar\.gz\"|url \"https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v$NEW_VERSION.tar.gz\"|" Formula/dog.rb
-echo -e "${GREEN}已更新Formula/dog.rb中的版本号和URL${RESET}"
 
 # 检查工作目录是否干净
 if [ -n "$(git status --porcelain)" ]; then
@@ -73,31 +68,28 @@ fi
 
 # 等待GitHub生成源代码包
 echo -e "${YELLOW}等待GitHub生成源代码包...${RESET}"
-sleep 5
+sleep 10  # 增加等待时间，确保GitHub有足够的时间生成源代码包
 
-# 下载源代码包并计算SHA256
+# 定义源代码包URL
 TARBALL_URL="https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v$NEW_VERSION.tar.gz"
-echo -e "${BLUE}下载源代码包: $TARBALL_URL${RESET}"
-TEMP_DIR=$(mktemp -d)
-TARBALL_PATH="$TEMP_DIR/homebrew-dog-$NEW_VERSION.tar.gz"
-curl -L -o "$TARBALL_PATH" "$TARBALL_URL"
+echo -e "${BLUE}源代码包URL: $TARBALL_URL${RESET}"
 
-# 计算SHA256
-SHA256=$(shasum -a 256 "$TARBALL_PATH" | cut -d ' ' -f 1)
+# 直接计算SHA256并更新Formula/dog.rb
+echo -e "${BLUE}计算SHA256并更新Formula/dog.rb...${RESET}"
+SHA256=$(curl -Ls "$TARBALL_URL" | shasum -a 256 | cut -d ' ' -f 1)
 echo -e "${GREEN}SHA256: $SHA256${RESET}"
 
-# 更新Formula/dog.rb中的SHA256
+# 然后更新Formula/dog.rb中的版本号、URL和SHA256
+sed -i '' "s/version \"[0-9]\+\.[0-9]\+\.[0-9]\+\"/version \"$NEW_VERSION\"/" Formula/dog.rb
+sed -i '' "s|url \"https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v[0-9]\+\.[0-9]\+\.[0-9]\+\.tar\.gz\"|url \"https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v$NEW_VERSION.tar.gz\"|" Formula/dog.rb
 sed -i '' "s/sha256 \"[a-f0-9]\{64\}\"/sha256 \"$SHA256\"/" Formula/dog.rb
-echo -e "${GREEN}已更新SHA256${RESET}"
+echo -e "${GREEN}已更新Formula/dog.rb中的版本号、URL和SHA256${RESET}"
 
 # 提交并推送更改
 git add Formula/dog.rb
-git commit -m "更新版本 $NEW_VERSION 的SHA256"
+git commit -m "更新版本 $NEW_VERSION 的信息"
 git push origin main
-echo -e "${GREEN}已提交并推送SHA256更新${RESET}"
-
-# 清理临时文件
-rm -rf "$TEMP_DIR"
+echo -e "${GREEN}已提交并推送Formula/dog.rb更新${RESET}"
 
 echo -e "${GREEN}发布完成！版本 $NEW_VERSION 已成功发布。${RESET}"
 echo -e "${BLUE}用户现在可以通过以下命令安装:${RESET}"
