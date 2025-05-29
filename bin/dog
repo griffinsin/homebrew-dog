@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# dog - 私人 dog 工具
+# 主入口文件
+
+# 导入全局变量
+source "$(dirname "$(dirname "${BASH_SOURCE[0]}")")/lib/globals.sh"
+
+# 加载命令文件
+load_command() {
+  local command_file="${COMMANDS_DIR}/$1.sh"
+  if [[ -f "${command_file}" ]]; then
+    source "${command_file}"
+    return 0
+  else
+    return 1
+  fi
+}
+
+# 主函数
+main() {
+  # 处理命令行参数
+  case "$1" in
+    -v|--version)
+      # 加载版本命令
+      load_command "version"
+      version_command
+      ;;
+    -h|--help)
+      # 加载帮助命令
+      load_command "help"
+      help_command
+      ;;
+    *)
+      # 默认情况下，调用系统的 man 命令
+      "${SYSTEM_MAN}" "$@"
+      ;;
+  esac
+}
+
+# 执行主函数
+main "$@"
