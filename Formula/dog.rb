@@ -5,7 +5,7 @@ class Dog < Formula
   license "MIT"
   
   url "https://github.com/griffinsin/homebrew-dog/archive/refs/tags/v1.0.2.tar.gz"
-  sha256 "d8adbe6352c902e0138424be3a599582486c196a2a8f86c52b1cbb8ccb89c081"
+  sha256 "de2bf6238eb8a729df51a787bf4da7197aca3cf323288d084ead89a38cbcd7a3"
   
   # 注意：sha256值需要在创建GitHub release后更新为实际值
 
