@@ -19,7 +19,9 @@ class Dog < Formula
     
     # 修改命令路径引用 - 修复检查和执行命令的部分
     inreplace bin/"dog", "if [[ ! -f \"${COMMANDS_DIR}/$1.sh\" ]]; then", "if [[ ! -f \"#{prefix}/commands/$1.sh\" ]]; then"
-    inreplace bin/"dog", "source \"${COMMANDS_DIR}/$1.sh\" \"$@\"", "source \"#{prefix}/commands/$1.sh\" \"$@\""
+    
+    # 修复命令执行部分，保存命令名称后再shift
+    inreplace bin/"dog", "# 执行命令\nshift\nsource \"${COMMANDS_DIR}/$1.sh\" \"$@\"", "# 执行命令\nCMD=$1\nshift\nsource \"#{prefix}/commands/$CMD.sh\" \"$@\""
   end
 
   test do
