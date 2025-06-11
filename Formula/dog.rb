@@ -20,8 +20,10 @@ class Dog < Formula
     # Fix command path references
     inreplace bin/"dog", 'COMMANDS_DIR=$(dirname "${BASH_SOURCE[0]}")/commands', "COMMANDS_DIR=#{prefix}/commands"
     
-    # Fix command execution - save command name before shift
-    inreplace bin/"dog", "# 执行命令\nshift\nsource \"${COMMANDS_DIR}/$1.sh\" \"$@\"", "# Execute command\nCMD=$1\nshift\nsource \"${COMMANDS_DIR}/$CMD.sh\" \"$@\""
+    # Create a new dog script with fixed command execution
+    dog_content = File.read(bin/"dog")
+    new_content = dog_content.gsub(/shift\s*\nsource.*\$1\.sh.*\$@/, "CMD=$1\nshift\nsource \"${COMMANDS_DIR}/$CMD.sh\" \"$@\"")
+    File.write(bin/"dog", new_content)
   end
 
   test do
