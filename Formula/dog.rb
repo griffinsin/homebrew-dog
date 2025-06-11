@@ -24,6 +24,11 @@ class Dog < Formula
     dog_content = File.read(bin/"dog")
     new_content = dog_content.gsub(/shift\s*\nsource.*\$1\.sh.*\$@/, "CMD=$1\nshift\nsource \"${COMMANDS_DIR}/$CMD.sh\" \"$@\"")
     File.write(bin/"dog", new_content)
+    
+    # Fix globals.sh path in all command scripts
+    Dir["#{prefix}/commands/*.sh"].each do |script|
+      inreplace script, '$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")')/lib/globals.sh', "#{prefix}/lib/globals.sh"
+    end
   end
 
   test do
