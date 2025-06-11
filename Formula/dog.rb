@@ -14,14 +14,11 @@ class Dog < Formula
     prefix.install "lib"
     prefix.install "bin/commands"
     
-    # Update path references in dog script
-    inreplace bin/"dog", "$(dirname \"$(dirname \"${BASH_SOURCE[0]}\")\")/lib/globals.sh", "#{prefix}/lib/globals.sh"
+    # Fix path references in dog script
+    inreplace bin/"dog", '$(dirname "$(dirname "${BASH_SOURCE[0]}")")/lib/globals.sh', "#{prefix}/lib/globals.sh"
     
-    # Fix command path references for command checking
-    inreplace bin/"dog", "if [[ ! -f \"${COMMANDS_DIR}/$1.sh\" ]]; then", "if [[ ! -f \"#{prefix}/commands/$1.sh\" ]]; then"
-    
-    # Fix command execution by saving command name before shift
-    inreplace bin/"dog", "# 执行命令\nshift\nsource \"${COMMANDS_DIR}/$1.sh\" \"$@\"", "# Execute command\nCMD=$1\nshift\nsource \"#{prefix}/commands/$CMD.sh\" \"$@\""
+    # Fix command path references
+    inreplace bin/"dog", 'COMMANDS_DIR=$(dirname "${BASH_SOURCE[0]}")/commands', "COMMANDS_DIR=#{prefix}/commands"
   end
 
   test do
