@@ -19,6 +19,9 @@ class Dog < Formula
     
     # Fix command path references
     inreplace bin/"dog", 'COMMANDS_DIR=$(dirname "${BASH_SOURCE[0]}")/commands', "COMMANDS_DIR=#{prefix}/commands"
+    
+    # Fix command execution - save command name before shift
+    inreplace bin/"dog", "# 执行命令\nshift\nsource \"${COMMANDS_DIR}/$1.sh\" \"$@\"", "# Execute command\nCMD=$1\nshift\nsource \"${COMMANDS_DIR}/$CMD.sh\" \"$@\""
   end
 
   test do
