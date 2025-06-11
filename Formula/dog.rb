@@ -16,7 +16,10 @@ class Dog < Formula
     
     # 修改dog脚本中的路径引用
     inreplace bin/"dog", "$(dirname \"$(dirname \"${BASH_SOURCE[0]}\")\")/lib/globals.sh", "#{prefix}/lib/globals.sh"
-    inreplace bin/"dog", "${COMMANDS_DIR}/$1.sh", "#{prefix}/commands/$1.sh"
+    
+    # 修改命令路径引用 - 修复检查和执行命令的部分
+    inreplace bin/"dog", "if [[ ! -f \"${COMMANDS_DIR}/$1.sh\" ]]; then", "if [[ ! -f \"#{prefix}/commands/$1.sh\" ]]; then"
+    inreplace bin/"dog", "source \"${COMMANDS_DIR}/$1.sh\" \"$@\"", "source \"#{prefix}/commands/$1.sh\" \"$@\""
   end
 
   test do
