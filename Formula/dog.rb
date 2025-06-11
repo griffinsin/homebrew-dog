@@ -5,7 +5,7 @@ class Dog < Formula
   license "MIT"
   
   url "https://github.com/griffinsin/dog/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+  sha256 "2562cd0beffedcc743c8a2c20c5483371b62c9ad530686e5defb49dd2ac7a15e"
   
   # 注意：sha256值需要在创建GitHub release后更新为实际值
 
