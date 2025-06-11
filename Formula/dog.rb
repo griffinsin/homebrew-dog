@@ -27,7 +27,10 @@ class Dog < Formula
     
     # Fix globals.sh path in all command scripts
     Dir["#{prefix}/commands/*.sh"].each do |script|
-      inreplace script, '$(dirname "$(dirname "$(dirname "${BASH_SOURCE[0]}")")')/lib/globals.sh', "#{prefix}/lib/globals.sh"
+      # 读取脚本内容并替换路径
+      content = File.read(script)
+      content.gsub!(/source.*globals\.sh/, "source #{prefix}/lib/globals.sh")
+      File.write(script, content)
     end
   end
 
