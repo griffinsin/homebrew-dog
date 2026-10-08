@@ -1,11 +1,11 @@
 class Dog < Formula
   desc "Personal dog tool"
   homepage "https://github.com/griffinsin/dog"
-  version "1.0.80"
+  version "1.0.81"
   license "MIT"
   
-  url "https://github.com/griffinsin/dog/archive/refs/tags/v1.0.80.tar.gz"
-  sha256 "29f252447c6cc96aa50e95eb8a9c35e2f86331d227249881f9708fa4889a8274"
+  url "https://github.com/griffinsin/dog/archive/refs/tags/v1.0.81.tar.gz"
+  sha256 "b356921ab4d1d5134410c57f65c2aa78158d8599a2473399ea74b27621df141e"
   
   # Note: sha256 value will be updated automatically after GitHub release is created
 
